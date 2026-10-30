@@ -1,0 +1,37 @@
+function calcularDoppler() {
+    const f0 = parseFloat(document.getElementById('frequenciaFonte').value);
+    const v = parseFloat(document.getElementById('velocidadeSom').value);
+    let vo = parseFloat(document.getElementById('velocidadeObservador').value);
+    let vf = parseFloat(document.getElementById('velocidadeFonte').value);
+
+    const dirObs = document.getElementById('direcaoObservador').value;
+    const dirFonte = document.getElementById('direcaoFonte').value;
+
+    const divResultado = document.getElementById('resultado');
+
+    if (isNaN(f0) || isNaN(v) || isNaN(vo) || isNaN(vf)) {
+        divResultado.innerText = "Por favor, preencha todos os campos corretamente.";
+        divResultado.style.color = "red";
+        return;
+    }
+
+    // Sinal para o observador (Aproximando = +, Afastando = -)
+    const sinalObs = (dirObs === "aproximando") ? 1 : -1;
+    
+    // Sinal para a fonte (Aproximando = -, Afastando = +)
+    const sinalFonte = (dirFonte === "aproximando") ? -1 : 1;
+
+    const denominador = v + (sinalFonte * vf);
+
+    if (denominador === 0) {
+        divResultado.innerText = "Erro: Divisão por zero (a fonte está na velocidade do som em aproximação).";
+        divResultado.style.color = "red";
+        return;
+    }
+
+    // Cálculo da frequência percebida
+    const fPercebida = f0 * ((v + (sinalObs * vo)) / denominador);
+
+    divResultado.style.color = "#212529";
+    divResultado.innerText = `Frequência Percebida: ${fPercebida.toFixed(2)} Hz`;
+}
